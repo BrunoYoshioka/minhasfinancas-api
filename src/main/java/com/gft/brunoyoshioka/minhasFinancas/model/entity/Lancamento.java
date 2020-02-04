@@ -1,0 +1,43 @@
+package com.gft.brunoyoshioka.minhasFinancas.model.entity;
+
+import com.gft.brunoyoshioka.minhasFinancas.model.enums.StatusLancamento;
+import com.gft.brunoyoshioka.minhasFinancas.model.enums.TipoLancamento;
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "lancamento", schema = "financas")
+@Builder
+@Data
+public class Lancamento {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String descricao;
+
+    private Integer mes;
+
+    private Integer ano;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
+
+    private BigDecimal valor;
+
+    @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
+    private LocalDate dataCadastro;
+
+    @Enumerated(value = EnumType.STRING)
+    private TipoLancamento tipo;
+
+    @Enumerated(value = EnumType.STRING)
+    private StatusLancamento status;
+}
