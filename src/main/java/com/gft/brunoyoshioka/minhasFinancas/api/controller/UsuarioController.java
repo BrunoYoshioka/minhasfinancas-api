@@ -5,23 +5,25 @@ import com.gft.brunoyoshioka.minhasFinancas.exception.ErroAutentication;
 import com.gft.brunoyoshioka.minhasFinancas.exception.RegraNegocioException;
 import com.gft.brunoyoshioka.minhasFinancas.model.entity.Usuario;
 import com.gft.brunoyoshioka.minhasFinancas.service.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@RequiredArgsConstructor
 public class UsuarioController {
     /*@GetMapping("/")
     public String helloWord(){
         return "Hello World! (Olá mundo!)";
     }*/
 
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    /*public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
-    }
+    }*/
 
     @PostMapping("/autenticar")
     public ResponseEntity autenticar(@RequestBody UsuarioDTO usuarioDTO){

@@ -7,12 +7,15 @@ import com.gft.brunoyoshioka.minhasFinancas.model.repository.LancamentoRepositor
 import com.gft.brunoyoshioka.minhasFinancas.service.LancamentoService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
+@Service
 public class LancamentoServiceImpl implements LancamentoService {
 
     private LancamentoRepository lancamentoRepository;
@@ -69,7 +72,7 @@ public class LancamentoServiceImpl implements LancamentoService {
         if (lancamento.getMes() == null || lancamento.getMes() < 1 || lancamento.getMes() > 12){
             throw new RegraNegocioException("Informe um Mês válido");
         }
-        if (lancamento.getAno() == null || lancamento.getAno().toString().length() == 4 ){
+        if (lancamento.getAno() == null || lancamento.getAno().toString().length() != 4 ){
             throw new RegraNegocioException("Informe um Ano válido");
         }
         if (lancamento.getUsuario() == null || lancamento.getUsuario().getId() == null){
@@ -81,5 +84,10 @@ public class LancamentoServiceImpl implements LancamentoService {
         if (lancamento.getTipo() == null) {
             throw new RegraNegocioException("Informe um tipo de lançamento");
         }
+    }
+
+    @Override
+    public Optional<Lancamento> obterPorId(Long id) {
+        return lancamentoRepository.findById(id);
     }
 }
