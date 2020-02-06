@@ -1,5 +1,6 @@
 package com.gft.brunoyoshioka.minhasFinancas.api.controller;
 
+import com.gft.brunoyoshioka.minhasFinancas.api.dto.AtualizaStatusDTO;
 import com.gft.brunoyoshioka.minhasFinancas.api.dto.LancamentoDTO;
 import com.gft.brunoyoshioka.minhasFinancas.exception.RegraNegocioException;
 import com.gft.brunoyoshioka.minhasFinancas.model.entity.Lancamento;
@@ -45,7 +46,7 @@ public class LancamentoController {
         lancamentoFiltro.setAno(ano);
 
         Optional<Usuario> usuario = usuarioService.obterPorId(idUsuario);
-        if (usuario.isPresent()) {
+        if (!usuario.isPresent()) {
             return ResponseEntity.badRequest().body("Não foi possível realizar a consulta." +
                     " Usuário não encontrado para o Id informado.");
         } else {
@@ -82,6 +83,26 @@ public class LancamentoController {
 
         }).orElseGet( () ->
                 new ResponseEntity("Lançamento não encontrado na base de dados" , HttpStatus.BAD_REQUEST));
+    }
+
+    @PutMapping("/{id}/atualiza-status")
+    public ResponseEntity atualizarStatus (@PathVariable("id") Long id, @RequestBody AtualizaStatusDTO atualizaStatusDTO){
+        return lancamentoService.obterPorId(id).map( entity -> {
+            StatusLancamento statusSelecionado = StatusLancamento.valueOf(atualizaStatusDTO.getStatus());
+
+            if(statusSelecionado == null){
+                return ResponseEntity.badRequest().body("Não foi possível atualizar o status do lançamento, envie um status válido.");
+            }
+
+            try{
+                entity.setStatus(statusSelecionado);
+                lancamentoService.atualizar(entity);
+                return ResponseEntity.ok(entity);
+            } catch (RegraNegocioException e){
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
+        }).orElseGet( () ->
+                new ResponseEntity("Lançamento não encontrado na base de dados", HttpStatus.BAD_REQUEST));
     }
 
     @DeleteMapping("/{id}")

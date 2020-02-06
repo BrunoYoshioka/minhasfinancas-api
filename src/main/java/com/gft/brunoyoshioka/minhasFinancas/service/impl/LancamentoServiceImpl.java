@@ -3,6 +3,7 @@ package com.gft.brunoyoshioka.minhasFinancas.service.impl;
 import com.gft.brunoyoshioka.minhasFinancas.exception.RegraNegocioException;
 import com.gft.brunoyoshioka.minhasFinancas.model.entity.Lancamento;
 import com.gft.brunoyoshioka.minhasFinancas.model.enums.StatusLancamento;
+import com.gft.brunoyoshioka.minhasFinancas.model.enums.TipoLancamento;
 import com.gft.brunoyoshioka.minhasFinancas.model.repository.LancamentoRepository;
 import com.gft.brunoyoshioka.minhasFinancas.service.LancamentoService;
 import org.springframework.data.domain.Example;
@@ -89,5 +90,22 @@ public class LancamentoServiceImpl implements LancamentoService {
     @Override
     public Optional<Lancamento> obterPorId(Long id) {
         return lancamentoRepository.findById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BigDecimal obterSaldoPorUsuario(Long id) {
+        BigDecimal receitas = lancamentoRepository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.RECEITA);
+        BigDecimal despesas = lancamentoRepository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.DESPESA);
+
+        if(receitas == null){
+            receitas = BigDecimal.ZERO;
+        }
+
+        if (despesas == null){
+            despesas = BigDecimal.ZERO;
+        }
+
+        return receitas.subtract(despesas);
     }
 }
