@@ -30,7 +30,7 @@ public class LancamentoRepositoryTest {
 
     @Test
     public void deveSalvarUmLancamento(){
-        Lancamento lancamento = criarlancamento();
+        Lancamento lancamento = criarLancamento();
 
         lancamento = lancamentoRepository.save(lancamento);
 
@@ -77,28 +77,16 @@ public class LancamentoRepositoryTest {
     }
 
     private Lancamento criarEPersistirUmLancamento() {
-        Lancamento lancamento = criarlancamento();
+        Lancamento lancamento = criarLancamento();
         testEntityManager.persist(lancamento);
         return lancamento;
     }
 
-    private Lancamento criarlancamento() {
-        return Lancamento.builder()
-                .ano(2020)
-                .mes(1)
-                .descricao("lançamento qualquer")
-                .valor(BigDecimal.valueOf(10))
-                .tipo(TipoLancamento.RECEITA)
-                .status(StatusLancamento.PENDENTE)
-                .dataCadastro(LocalDate.now())
-                .build();
-    }
-
     public static Lancamento criarLancamento() {
         return Lancamento.builder()
-                .ano(2020)
+                .ano(2019)
                 .mes(1)
-                .descricao("lançamento qualquer")
+                .descricao("lancamento qualquer")
                 .valor(BigDecimal.valueOf(10))
                 .tipo(TipoLancamento.RECEITA)
                 .status(StatusLancamento.PENDENTE)

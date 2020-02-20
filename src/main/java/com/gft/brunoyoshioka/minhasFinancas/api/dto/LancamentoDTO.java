@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 
 @Data
 @Builder
+@NoArgsConstructor // construtor sem argumentos
+@AllArgsConstructor // construtor com argumentos
 public class LancamentoDTO {
     private Long id;
     private String descricao;
